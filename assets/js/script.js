@@ -1,0 +1,1 @@
+console.log("Vehicle Rental Management System loaded successfully.");
