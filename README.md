@@ -8,13 +8,17 @@ Users can create an account, log in, browse available vehicles, search and filte
 
 The system also provides an admin section for managing vehicles and bookings.
 
+---
+
 ## Problem Statement
 
 Traditional vehicle rental processes may require customers to manually contact rental providers to check vehicle availability and make bookings. This can take time and may result in booking conflicts.
 
 The Vehicle Rental Management System provides a simple online platform where users can view vehicles, check their availability, and make bookings based on selected rental dates.
 
-The system also helps prevent multiple users from booking the same vehicle for overlapping dates.
+The system will also prevent multiple users from booking the same vehicle for overlapping dates.
+
+---
 
 ## Objectives
 
@@ -30,6 +34,8 @@ The system also helps prevent multiple users from booking the same vehicle for o
 * Provide an admin section for vehicle management.
 * Allow the administrator to manage bookings.
 * Implement date-based availability validation.
+
+---
 
 ## Target Users
 
@@ -58,13 +64,14 @@ The administrator can:
 * View customer bookings.
 * Manage booking information.
 
+---
+
 ## Functional Requirements
 
 The main functional requirements of the system are:
 
 * User registration
-* User login
-* User logout
+* User login and logout
 * Vehicle catalog
 * Vehicle details
 * Vehicle search
@@ -80,6 +87,8 @@ The main functional requirements of the system are:
 * Delete vehicles
 * Manage bookings
 
+---
+
 ## Non-Functional Requirements
 
 The system should provide:
@@ -94,6 +103,8 @@ The system should provide:
 * Maintainable project structure.
 * Proper error handling.
 * Reasonable application performance.
+
+---
 
 ## Technology Stack
 
@@ -112,13 +123,16 @@ The system should provide:
 * MongoDB
 * MongoDB Atlas
 
-### Development Tools
+### Development Environment and Tools
 
 * Visual Studio Code
+* XAMPP
+* Apache
 * Git
 * GitHub
-* XAMPP / Apache
 * MongoDB Atlas
+
+---
 
 ## Database Design
 
@@ -130,11 +144,13 @@ Stores registered user and administrator information.
 
 ### vehicles
 
-Stores information about vehicles available for rental, such as vehicle name, type, price, and availability.
+Stores vehicle information such as vehicle name, type, rental price, availability, and other vehicle details.
 
 ### bookings
 
-Stores vehicle booking information, including the user, selected vehicle, booking dates, and booking status.
+Stores booking information including the user, selected vehicle, start date, end date, and booking status.
+
+---
 
 ## Main System Modules
 
@@ -149,6 +165,8 @@ The project will contain the following major modules:
 7. Admin Management
 8. Date-Based Availability Validation
 
+---
+
 ## Advanced Feature
 
 The main advanced feature of this project is **date-based availability validation**.
@@ -159,7 +177,31 @@ If another booking overlaps with the selected dates, the vehicle will be conside
 
 If there is no conflicting booking, the user will be allowed to complete the booking.
 
-## Individual Responsibility
+---
+
+# Weekly Project Progress
+
+## Week 1 - Project Initiation
+
+### Work Completed
+
+* Selected the Vehicle Rental Management System project.
+* Defined the project problem statement.
+* Defined project objectives.
+* Identified target users.
+* Identified functional requirements.
+* Identified non-functional requirements.
+* Selected the technology stack.
+* Defined individual project responsibilities.
+* Created the initial project folder structure.
+* Initialized the Git repository.
+* Created and connected the GitHub repository.
+* Created the initial project files.
+* Created project documentation using README.md.
+* Created initial Git commits.
+* Pushed the project to GitHub.
+
+### Individual Responsibility
 
 This is an individual project.
 
@@ -183,29 +225,69 @@ My responsibilities include:
 * Git and GitHub version control
 * Project documentation
 
-## GitHub Version Control
+### Week 1 Status
 
-Git and GitHub are used to maintain the development history of this project.
+**Week 1 project initiation completed successfully.**
 
-Meaningful commits will be created throughout the development process so that the progress of the project can be tracked week by week.
+---
 
-The repository will contain the project source code, documentation, database-related files, and other required project resources.
+## Week 2 - PHP Foundation and Server Setup
 
-## Current Project Structure
+### Work Completed
+
+* Installed XAMPP development environment.
+* Configured the Apache web server.
+* Configured PHP for local development.
+* Successfully executed PHP through Apache.
+* Moved the project into the XAMPP `htdocs` directory.
+* Configured a single project folder for VS Code, Git, GitHub, XAMPP, and PHP.
+* Created the basic PHP project architecture.
+* Created a reusable application configuration file.
+* Created reusable header and footer components.
+* Created the CSS folder and stylesheet.
+* Created the JavaScript folder and script file.
+* Created the basic admin folder structure.
+* Successfully tested the application using localhost.
+* Committed the Week 2 project structure to Git.
+* Pushed Week 2 development to GitHub.
+
+### Local Application
+
+The application is currently executed locally using:
+
+`http://localhost/VehicleRentalSystem/`
+
+### PHP Server Test
+
+The application successfully displays:
+
+`PHP Server Status: Running Successfully`
+
+This confirms that Apache and PHP are processing the Vehicle Rental Management System correctly.
+
+### Week 2 Project Structure
 
 ```text
 VehicleRentalSystem/
 │
 ├── admin/
+│   └── index.php
 │
 ├── assets/
 │   ├── css/
-│   ├── js/
-│   └── images/
+│   │   └── style.css
+│   ├── images/
+│   └── js/
+│       └── script.js
 │
 ├── config/
+│   └── app.php
+│
 ├── database/
+│
 ├── includes/
+│   ├── header.php
+│   └── footer.php
 │
 ├── index.php
 ├── login.php
@@ -214,22 +296,156 @@ VehicleRentalSystem/
 └── README.md
 ```
 
-## Project Status
+### Week 2 Status
 
-### Week 1 — Project Initiation
+**Week 2 PHP server setup and basic project architecture completed successfully.**
 
-* Project selected: Vehicle Rental Management System
-* Problem statement defined
-* Project objectives defined
-* Target users identified
-* Functional requirements identified
-* Non-functional requirements identified
-* Technology stack selected
-* Individual responsibilities defined
-* Initial project structure created
-* Git repository initialized
-* GitHub repository created and connected
-* Initial project files committed
-* README documentation created
+---
 
-**Status: Week 1 setup completed.**
+## Week 3 - API Routes and Request/Response Handling
+
+### Work Completed
+
+* Created the basic API folder structure.
+* Created the main API route.
+* Created the vehicle API route.
+* Implemented PHP request handling.
+* Implemented JSON responses.
+* Implemented GET request handling.
+* Created temporary vehicle data for API testing.
+* Successfully tested API endpoints using the browser.
+* Added API endpoint documentation.
+
+### Week 3 API Structure
+
+```text
+api/
+│
+├── index.php
+│
+└── vehicles/
+    └── index.php
+```
+
+### Available API Endpoints
+
+| Method | Endpoint         | Description                                                        |
+| ------ | ---------------- | ------------------------------------------------------------------ |
+| GET    | `/api/`          | Checks whether the Vehicle Rental Management System API is running |
+| GET    | `/api/vehicles/` | Returns the current sample vehicle list                            |
+
+### Main API Test
+
+Local endpoint:
+
+`http://localhost/VehicleRentalSystem/api/`
+
+Example response:
+
+```json
+{
+    "success": true,
+    "message": "Vehicle Rental Management System API is working"
+}
+```
+
+### Vehicle API Test
+
+Local endpoint:
+
+`http://localhost/VehicleRentalSystem/api/vehicles/`
+
+The vehicle endpoint currently returns temporary sample vehicle information for:
+
+* Hyundai Creta
+* Honda City
+* Royal Enfield Classic 350
+
+These records are currently used only for testing the API. Database-driven vehicle records will be implemented during the database integration and CRUD stages.
+
+### Request and Response Handling
+
+PHP uses the incoming HTTP request method to determine what operation should be performed.
+
+The current vehicle endpoint checks:
+
+```php
+$_SERVER["REQUEST_METHOD"]
+```
+
+When the request method is `GET`, the API returns vehicle information as JSON.
+
+If an unsupported HTTP method is sent to the current endpoint, the API returns a method-not-allowed response.
+
+### HTTP Methods
+
+The application will use the following HTTP methods:
+
+* **GET** - Retrieve information
+* **POST** - Create new information
+* **PUT** - Update existing information
+* **DELETE** - Delete information
+
+The GET method has currently been implemented for retrieving vehicle information.
+
+POST, PUT, and DELETE operations will be implemented during the CRUD development phase.
+
+### API Response Format
+
+The API uses JSON for responses.
+
+A successful response follows a structure similar to:
+
+```json
+{
+    "success": true,
+    "data": []
+}
+```
+
+An unsuccessful response can follow a structure similar to:
+
+```json
+{
+    "success": false,
+    "message": "Method not allowed"
+}
+```
+
+### Week 3 Testing
+
+The following endpoints were tested successfully:
+
+* `/api/`
+* `/api/vehicles/`
+
+Both endpoints returned valid JSON responses through the local Apache/PHP server.
+
+### Week 3 Status
+
+**Week 3 basic API routing, GET request handling, and JSON response handling completed successfully.**
+
+---
+
+## GitHub Version Control
+
+Git and GitHub are being used to maintain the development history of the project.
+
+Meaningful commits are created throughout development so that project progress can be monitored week by week.
+
+The repository contains the source code, project documentation, configuration files, and other required project resources.
+
+---
+
+## Current Project Status
+
+* Week 1 - Project Initiation: **Completed**
+* Week 2 - PHP Foundation and Server Setup: **Completed**
+* Week 3 - API Routes and Request/Response Handling: **Completed**
+* Week 4 - Middleware and Error Handling: **Not Started**
+* Week 5 - Database Integration: **Not Started**
+* Week 6 - CRUD and Query Operations: **Not Started**
+* Week 7 - Authentication: **Not Started**
+* Week 8 - Security and Quality: **Not Started**
+* Week 9 - Full Application Integration: **Not Started**
+* Week 10 - Deployment and Final Submission: **Not Started**
