@@ -1,10 +1,13 @@
 <?php
 
-header("Content-Type: application/json");
+require_once '../middleware/jsonMiddleware.php';
+require_once '../middleware/requestLogger.php';
+require_once '../utils/response.php';
 
-echo json_encode([
-    "success" => true,
-    "message" => "Vehicle Rental Management System API is working"
-]);
+setJsonResponse();
+logRequest();
 
-?>
+sendResponse(
+    true,
+    'Vehicle Rental Management System API is working'
+);
