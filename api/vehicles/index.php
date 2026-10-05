@@ -2,51 +2,59 @@
 
 require_once '../../middleware/jsonMiddleware.php';
 require_once '../../middleware/requestLogger.php';
+require_once '../../middleware/corsMiddleware.php';
 require_once '../../utils/response.php';
+require_once '../../config/database.php';
 
 setJsonResponse();
+handleCors();
 logRequest();
 
-$method = $_SERVER['REQUEST_METHOD'];
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    sendResponse(
+        false,
+        'Method not allowed. Use GET.',
+        null,
+        405
+    );
+}
 
-if ($method === 'GET') {
+try {
 
-    $vehicles = [
-        [
-            'id' => 1,
-            'name' => 'Hyundai Creta',
-            'type' => 'Car',
-            'pricePerDay' => 2500,
-            'status' => 'Available'
-        ],
-        [
-            'id' => 2,
-            'name' => 'Honda City',
-            'type' => 'Car',
-            'pricePerDay' => 2200,
-            'status' => 'Available'
-        ],
-        [
-            'id' => 3,
-            'name' => 'Royal Enfield Classic 350',
-            'type' => 'Bike',
-            'pricePerDay' => 1200,
-            'status' => 'Available'
-        ]
-    ];
+    $database = getDatabase();
+    $collection = $database->vehicles;
+
+    $vehicles = $collection->find()->toArray();
+
+    $vehicleList = [];
+
+    foreach ($vehicles as $vehicle) {
+
+        $vehicleList[] = [
+            'id' => (string) $vehicle['_id'],
+            'name' => $vehicle['name'] ?? '',
+            'type' => $vehicle['type'] ?? '',
+            'pricePerDay' => $vehicle['pricePerDay'] ?? 0,
+            'status' => $vehicle['status'] ?? ''
+        ];
+    }
 
     sendResponse(
         true,
-        'Vehicles retrieved successfully',
-        $vehicles
+        'Vehicles retrieved successfully from MongoDB',
+        $vehicleList
     );
 
-} else {
+} catch (Exception $e) {
+
+    error_log(
+        'Vehicle retrieval error: ' . $e->getMessage()
+    );
 
     sendResponse(
         false,
-        'Method not allowed',
+        'Failed to retrieve vehicles from database.',
         null,
-        405
+        500
     );
 }
