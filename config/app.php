@@ -1,6 +1,4 @@
 <?php
-
-define("APP_NAME", "Vehicle Rental Management System");
-define("BASE_URL", "http://localhost/VehicleRentalSystem");
-
+define('APP_NAME', 'VS Travells');
+define('BASE_URL', 'http://localhost/VehicleRentalSystem');
 ?>

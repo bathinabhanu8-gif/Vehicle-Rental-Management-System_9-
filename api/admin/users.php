@@ -1,0 +1,3 @@
+<?php
+require_once '../../middleware/jsonMiddleware.php';require_once '../../middleware/requestLogger.php';require_once '../../middleware/corsMiddleware.php';require_once '../../middleware/authMiddleware.php';require_once '../../utils/response.php';require_once '../../config/database.php';
+setJsonResponse();handleCors();logRequest();requireAdmin();try{$list=[];foreach(getDatabase()->users->find(['role'=>'user'],['sort'=>['createdAt'=>-1]]) as $u)$list[]=['id'=>(string)$u['_id'],'name'=>$u['name']??'','email'=>$u['email']??'','phone'=>$u['phone']??'','license'=>$u['license']??''];sendResponse(true,'Customers retrieved',$list);}catch(Exception $e){sendResponse(false,'Failed to load customers.',null,500);}

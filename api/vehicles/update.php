@@ -12,7 +12,7 @@ use MongoDB\BSON\ObjectId;
 setJsonResponse();
 handleCors();
 logRequest();
-requireLogin();
+requireAdmin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
     sendResponse(

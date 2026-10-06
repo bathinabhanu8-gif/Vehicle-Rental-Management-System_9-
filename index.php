@@ -1,23 +1,13 @@
-<?php
-
-require_once 'includes/header.php';
-
-?>
-
-<section>
-    <h2>Welcome to Vehicle Rental Management System</h2>
-
-    <p>
-        Rent cars and bikes easily using our simple vehicle rental platform.
-    </p>
-
-    <p>
-        PHP Server Status: Running Successfully
-    </p>
-</section>
-
-<?php
-
-require_once 'includes/footer.php';
-
-?>
+<?php require_once 'includes/header.php'; ?>
+<section class="hero"><div class="hero-overlay"></div><div class="hero-content"><span class="eyebrow">PREMIUM VEHICLE RENTALS</span><h1>Your road.<br>Your rules.</h1><p>Choose the right car or bike, request your dates, and let VS Travells take care of the rest.</p><a class="btn light" href="#fleet">Explore our fleet</a></div><div class="hero-card"><strong>Easy booking</strong><span>Choose vehicle & dates</span><b>→</b><strong>Admin approval</strong><span>We verify availability</span><b>→</b><strong>Secure demo payment</strong><span>Pay after approval</span></div></section>
+<section class="section intro"><span class="eyebrow dark">WHY VS TRAVELLS</span><h2>Renting should feel effortless.</h2><div class="feature-row"><div><span>01</span><h3>Curated vehicles</h3><p>Cars and bikes selected for everyday trips, business travel and weekend drives.</p></div><div><span>02</span><h3>Clear pricing</h3><p>See the daily rate and total amount before you send a booking request.</p></div><div><span>03</span><h3>Human approval</h3><p>Every request is reviewed by the admin before payment and confirmation.</p></div></div></section>
+<section class="section fleet" id="fleet"><div class="section-head"><div><span class="eyebrow dark">OUR FLEET</span><h2>Find your perfect ride</h2></div><p>Search, filter and request a vehicle in a few clicks.</p></div><div class="filter-bar"><input id="search" placeholder="Search vehicle name"><select id="type"><option value="">All types</option><option>Car</option><option>Bike</option></select><select id="status"><option value="">All status</option><option>Available</option><option>Unavailable</option></select><button class="btn" onclick="loadVehicles()">Search fleet</button></div><div id="vehicleMsg"></div><div id="vehicles" class="vehicle-grid"><div class="empty-card">Loading vehicles…</div></div></section>
+<section class="section process"><span class="eyebrow dark">HOW IT WORKS</span><h2>From search to keys in four steps.</h2><div class="steps"><div><b>1</b><h3>Choose</h3><p>Find a vehicle that fits your trip.</p></div><div><b>2</b><h3>Request</h3><p>Select dates and send your request.</p></div><div><b>3</b><h3>Get approved</h3><p>Admin reviews availability.</p></div><div><b>4</b><h3>Pay & confirm</h3><p>Use demo payment to confirm.</p></div></div></section>
+<script>
+const loggedIn=<?php echo isset($_SESSION['user_id'])?'true':'false'; ?>;
+const imageFor=v=>v.type==='Bike'?'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=900&q=80':'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80';
+async function loadVehicles(){try{const r=await fetch('api/vehicles/'),j=await r.json();let list=j.data||[];const q=search.value.toLowerCase().trim(),t=type.value,s=status.value;list=list.filter(v=>(!q||v.name.toLowerCase().includes(q))&&(!t||v.type===t)&&(!s||v.status===s));vehicles.innerHTML=list.length?list.map(v=>`<article class="vehicle-card"><div class="vehicle-photo" style="background-image:url('${imageFor(v)}')"><span class="status ${v.status==='Available'?'ok':'off'}">${v.status}</span></div><div class="vehicle-body"><div class="vehicle-title"><div><small>${v.type}</small><h3>${v.name}</h3></div><div class="price">₹${Number(v.pricePerDay).toLocaleString('en-IN')}<small>/day</small></div></div><div class="vehicle-meta"><span>✓ Flexible dates</span><span>✓ Admin verified</span></div>${v.status==='Available'?`<div class="booking-row"><label>Pickup<input type="date" id="s-${v.id}"></label><label>Return<input type="date" id="e-${v.id}"></label></div><button class="btn wide" onclick="requestBooking('${v.id}')">Request booking</button>`:'<button class="btn wide disabled" disabled>Currently unavailable</button>'}</div></article>`).join(''):'<div class="empty-card">No vehicles match your filters.</div>';}catch(e){vehicles.innerHTML='<div class="empty-card">Unable to load vehicles.</div>'}}
+async function requestBooking(id){if(!loggedIn){location.href='login.php';return}const startDate=document.getElementById('s-'+id).value,endDate=document.getElementById('e-'+id).value;if(!startDate||!endDate){toast('Please select pickup and return dates.','error');return}const r=await fetch('api/bookings/create.php',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({vehicleId:id,startDate,endDate})}),j=await r.json();toast(j.message,j.success?'success':'error');if(j.success)setTimeout(()=>location.href='bookings.php',900)}
+loadVehicles();
+</script>
+<?php require_once 'includes/footer.php'; ?>

@@ -1,10 +1,1 @@
-</main>
-
-<footer>
-    <p>&copy; 2026 Vehicle Rental Management System</p>
-</footer>
-
-<script src="<?php echo BASE_URL; ?>/assets/js/script.js"></script>
-
-</body>
-</html>
+</main><footer class="site-footer"><div><div class="footer-brand">VS Travells</div><p>Simple, reliable vehicle rentals for every journey.</p></div><div><strong>Quick Links</strong><a href="<?php echo BASE_URL; ?>/index.php">Vehicles</a><a href="<?php echo BASE_URL; ?>/bookings.php">My Bookings</a></div><div><strong>Support</strong><span>Mon–Sun • 8:00 AM–9:00 PM</span><span>Demo rental platform</span></div><p class="copyright">© 2026 VS Travells. College project.</p></footer><script src="<?php echo BASE_URL; ?>/assets/js/script.js"></script></body></html>

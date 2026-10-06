@@ -1,1 +1,2 @@
-console.log("Vehicle Rental Management System loaded successfully.");
+function toast(message,type='success'){let box=document.getElementById('globalToast');if(!box){box=document.createElement('div');box.id='globalToast';box.className='toast';document.body.appendChild(box)}box.textContent=message;box.className='toast show '+type;clearTimeout(window.__toast);window.__toast=setTimeout(()=>box.classList.remove('show'),3200)}
+document.addEventListener('DOMContentLoaded',()=>{const btn=document.querySelector('.nav-toggle'),nav=document.querySelector('.main-nav');if(btn&&nav)btn.onclick=()=>nav.classList.toggle('open');document.querySelectorAll('input[type=date]').forEach(i=>i.min=new Date().toISOString().split('T')[0])});

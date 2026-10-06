@@ -10,7 +10,7 @@ require_once '../../config/database.php';
 setJsonResponse();
 handleCors();
 logRequest();
-requireLogin();
+requireAdmin();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendResponse(
