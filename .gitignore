@@ -3,3 +3,7 @@
 /composer.phar
 /composer-setup.php
 /cookies.txt
+/logs/*.log
+.env
+.env.*
+!.env.example

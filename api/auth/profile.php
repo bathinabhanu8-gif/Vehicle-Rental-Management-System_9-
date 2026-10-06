@@ -9,6 +9,7 @@ setJsonResponse();
 handleCors();
 logRequest();
 
+session_name('VS_CUSTOMER');
 session_start();
 
 if (!isset($_SESSION['user_id'])) {

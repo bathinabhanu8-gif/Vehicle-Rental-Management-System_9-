@@ -1,0 +1,13 @@
+.git
+.gitignore
+vendor
+config/database.local.php
+composer.phar
+composer-setup.php
+cookies.txt
+logs/*.log
+*.zip
+FINAL_SETUP.txt
+INSTALL.txt
+PASTE_THESE_FILES.txt
+READ_ME_FIRST.txt

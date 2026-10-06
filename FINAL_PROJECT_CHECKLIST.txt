@@ -1,0 +1,39 @@
+VS TRAVELLS - FINAL INTEGRATED PROJECT
+
+Completed scope:
+1. Customer registration with own name/email/phone/password, hashing, role=user, duplicate-email validation.
+2. Customer login with same registered credentials; legacy plain-text development passwords are migrated to hashes on successful login.
+3. Separate /admin/ login with server-side admin role enforcement.
+4. Customer dashboard with available vehicles, pending, confirmed, active and completed counts.
+5. Customer profile with name, phone, licence and address; role cannot be edited.
+6. Vehicle browsing with image, type, registration, seats, fuel, transmission, price, status and description.
+7. Booking form with dates, pickup/return locations and live total-price preview.
+8. Server-side date validation and overlapping reservation protection.
+9. Booking lifecycle: Pending -> Approved/Awaiting Payment -> Confirmed/Paid -> Active -> Returned -> Completed.
+10. Rejected and Cancelled booking outcomes.
+11. Demo payment with UPI/Card/Cash-at-Pickup simulation and payment reference.
+12. My Bookings with statuses, payment data, route, total and timeline.
+13. Admin dashboard with vehicle/customer/booking counts and revenue.
+14. Admin booking approval/rejection and rental lifecycle controls.
+15. Admin vehicle add/edit/delete with detailed vehicle fields and maintenance status.
+16. Admin customer list with profile details and booking counts; All Bookings provides booking history.
+17. Revenue calculated from paid demo bookings and recent payments shown.
+18. Clear success/error validation messages.
+19. Security: hashed passwords, protected customer/admin APIs, role checks, sessions, secret database config excluded from package/Git.
+20. UI/responsive polish preserved and extended.
+
+FINAL LOCAL TEST ORDER:
+A. Register a NEW customer with any normal details.
+B. Sign in using exactly the same email/password.
+C. Update profile.
+D. Browse vehicle and choose dates/locations; verify total.
+E. Submit request.
+F. Admin login at /admin/ and approve.
+G. Customer login -> My Bookings -> Demo Pay.
+H. Admin verifies Paid/Confirmed and revenue.
+I. Admin marks Picked Up -> Active, Returned -> Returned, Mark Completed -> Completed.
+J. Also test wrong password, duplicate email, overlapping dates, customer access to /admin/, rejected booking, cancellation and logout.
+
+IMPORTANT:
+- Keep your existing config/database.local.php on your laptop. It is intentionally NOT included in this replacement ZIP.
+- Keep your existing vendor folder. It is intentionally NOT included in this replacement ZIP.

@@ -1,0 +1,42 @@
+VEHICLE RENTAL MANAGEMENT SYSTEM - FINAL SETUP
+
+1. Keep your existing secret file:
+   C:\xampp\htdocs\VehicleRentalSystem\config\database.local.php
+   Do NOT upload this file to GitHub.
+
+2. Copy all files/folders from this package into:
+   C:\xampp\htdocs\VehicleRentalSystem
+   Choose Replace files when Windows asks.
+   This package intentionally does NOT contain database.local.php or vendor.
+
+3. Keep your existing vendor folder. If vendor is missing, run:
+   php composer.phar install
+
+4. Restart Apache in XAMPP.
+
+5. Open:
+   http://localhost/VehicleRentalSystem/
+
+6. Test user login:
+   Email: testuser@gmail.com
+   Password: Test123
+
+7. To test Admin, change ONLY the trusted test user's role in MongoDB Atlas users collection:
+   role: "user"  ->  role: "admin"
+   Then logout and login again. The Admin link will appear.
+
+8. Final tests:
+   - Register
+   - Login
+   - Search/filter vehicles
+   - Book a vehicle
+   - Try overlapping dates (must be rejected)
+   - My Bookings
+   - Cancel booking
+   - Admin add/edit/delete vehicle
+   - Admin view all bookings
+
+9. Git commands after tests pass:
+   git add .
+   git commit -m "Complete Week 9 vehicle rental application integration"
+   git push origin main

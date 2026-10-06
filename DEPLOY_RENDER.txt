@@ -1,0 +1,15 @@
+VS TRAVELLS - RENDER DEPLOYMENT
+
+1. Copy every file/folder from this package into C:\xampp\htdocs\VehicleRentalSystem and choose Replace.
+2. Do NOT delete config\database.local.php. It remains ignored and is still used by XAMPP locally.
+3. Test http://localhost/VehicleRentalSystem/ once. The new database.php and app.php preserve local behavior.
+4. Commit and push these deployment files to GitHub.
+5. In Render, create a Web Service from your GitHub repository and use Docker.
+6. Add the secret environment variable MONGODB_URI with your full MongoDB Atlas connection string.
+7. MONGODB_DATABASE is vehicle_rental_system (render.yaml already declares it).
+8. Deploy. Render will supply PORT and the startup script will make Apache listen on it.
+
+SECURITY:
+- Never commit config/database.local.php.
+- Never put your MongoDB password in Dockerfile, render.yaml, or GitHub.
+- The package does not contain your MongoDB URI/password.

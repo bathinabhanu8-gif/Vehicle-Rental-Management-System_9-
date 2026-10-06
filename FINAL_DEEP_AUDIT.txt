@@ -1,0 +1,46 @@
+VS TRAVELLS — FINAL DEEP AUDIT
+Date: 2026-10-06
+
+Reviewed from the user's latest uploaded VehicleRentalSystem project.
+
+CORRECTED IN THIS PASS
+1. Customer registration Full Name bug: browser global `name` conflict removed; form fields are now read explicitly with getElementById.
+2. Customer login: email/password fields now read explicitly; added network/error handling.
+3. Customer profile: removed browser-global field access; explicit field handling and save/load error handling added.
+4. Admin login: removed browser-global field access; explicit field handling and error handling added.
+5. Admin vehicle form: removed implicit element globals; explicit element lookup is used for add/edit operations.
+6. Vehicle list filter: removed implicit browser-global access for search/type/status.
+7. Vehicle seats default: corrected PHP expression so Bike defaults to 2 seats and Car defaults to 5 when seats are missing.
+8. Demo payment: removed Cash at Pickup from the demo-paid flow so unpaid cash cannot be counted as paid revenue. Demo methods are UPI and Card.
+9. Footer navigation: corrected the customer quick link so it goes to Vehicles for signed-in customers and Customer Login otherwise.
+
+REVIEWED FEATURES
+- Customer registration creates role=user and hashes passwords with password_hash().
+- Customer login uses password_verify() and blocks admin accounts.
+- Separate /admin/ login verifies role=admin.
+- Customer/admin protected APIs enforce roles server-side.
+- Profile update does not allow role changes.
+- Booking creation validates dates and pickup/return locations.
+- Booking overlap protection exists both when requesting and when admin approves.
+- Booking flow: Pending -> Approved/Awaiting Payment -> Confirmed/Paid -> Active -> Returned -> Completed.
+- Rejected and Cancelled states are supported.
+- Demo payment stores reference/method/time and drives revenue.
+- Admin stats include vehicles, customers, pending, confirmed, active, completed, paid bookings and revenue.
+- Vehicle add/edit/delete APIs are admin protected.
+- Vehicle delete is blocked when booking history exists.
+- MongoDB config supports local ignored database.local.php and Render environment variables.
+- database.local.php, vendor, composer.phar and other local/private artifacts are Git-ignored.
+
+AUTOMATED STATIC CHECKS COMPLETED
+- PHP syntax check across all application PHP files: PASS.
+- JavaScript syntax check for all inline page scripts: PASS.
+- JavaScript syntax check for assets/js/script.js: PASS.
+- Scan for the known `name.value` / login/profile implicit-global bug pattern: PASS after corrections.
+
+IMPORTANT LOCAL RUNTIME TEST STILL REQUIRED
+Static checks cannot simulate the user's live XAMPP + MongoDB Atlas data/session state. After copying this package, perform one end-to-end browser test:
+Register new customer -> login with same password -> profile -> booking -> admin approval -> demo payment -> active -> returned -> completed -> revenue.
+Also test duplicate email, wrong password, overlapping dates, customer access to /admin/, cancellation, rejection and logout.
+
+PRIVATE FILES
+This final replacement package intentionally does NOT include config/database.local.php, vendor/, .git/, composer.phar, cookies.txt, or request logs. Keep the working copies already present in C:\xampp\htdocs\VehicleRentalSystem.

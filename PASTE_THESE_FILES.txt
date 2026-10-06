@@ -1,0 +1,10 @@
+Copy these files directly into:
+C:\xampp\htdocs\VehicleRentalSystem
+
+Files:
+- index.php
+- login.php
+- register.php
+- logout.php
+
+Choose Replace if Windows asks. Do not put them inside api or admin.

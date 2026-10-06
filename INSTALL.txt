@@ -1,0 +1,13 @@
+WEEK 9 UPDATE - VEHICLE RENTAL MANAGEMENT SYSTEM
+
+1. Keep your existing C:\xampp\htdocs\VehicleRentalSystem folder.
+2. Extract this ZIP.
+3. Copy ALL files/folders inside VehicleRentalSystem_Week9_Complete into your existing VehicleRentalSystem folder.
+4. When Windows asks, choose Replace the files in the destination.
+5. This update DOES NOT contain or replace config/database.local.php, vendor, composer.phar, cookies.txt, or your .git folder.
+6. Start Apache in XAMPP.
+7. Open http://localhost/VehicleRentalSystem/
+8. Test Register -> Login -> Book Vehicle -> My Bookings.
+9. For Admin: in MongoDB Atlas users collection, change one test user's role from user to admin, log out, log in, then open /VehicleRentalSystem/admin/index.php.
+
+IMPORTANT: Do not delete your existing config/database.local.php. It contains your MongoDB connection.

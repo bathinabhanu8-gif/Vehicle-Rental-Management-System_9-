@@ -1,0 +1,22 @@
+VS TRAVELLS - FINAL INTEGRATED CUSTOMER + ADMIN PORTALS
+
+Copy EVERYTHING inside this folder into:
+C:\xampp\htdocs\VehicleRentalSystem
+Choose Replace files in destination.
+
+DO NOT delete your existing project folder.
+DO NOT delete config\database.local.php or vendor.
+
+Customer entry:
+http://localhost/VehicleRentalSystem/
+This opens Customer Login. Customer registration creates role=user.
+
+Admin entry:
+http://localhost/VehicleRentalSystem/admin/
+If Apache directory index does not redirect automatically, use /admin/login.php.
+Admin credentials use the existing role=admin account.
+
+Flow:
+Customer Login -> Dashboard -> Vehicles -> Booking Pending -> Admin Approves -> Demo Payment -> Confirmed -> Admin marks Picked Up -> Active -> Admin marks Returned -> Completed.
+
+Demo payment never charges real money.

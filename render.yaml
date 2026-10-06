@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: vs-travells
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DATABASE
+        value: vehicle_rental_system

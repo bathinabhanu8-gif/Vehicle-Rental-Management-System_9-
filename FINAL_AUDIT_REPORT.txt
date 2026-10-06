@@ -1,0 +1,40 @@
+VS TRAVELLS - FINAL AUDIT REPORT
+================================
+Source: VehicleRentalSystem(7).zip supplied by the user.
+
+CONFIRMED CORRECTIONS IN THIS BUILD
+- Admin login now queries the supplied email directly, normalizes legacy email values, requires role=admin, and verifies the bcrypt password with password_verify().
+- Local XAMPP now deterministically uses config/database.local.php when that file exists. Deployment uses environment variables only when the local file is absent. This prevents stale machine environment variables from silently pointing login at another database.
+- Customer and admin continue to use separate named PHP sessions: VS_CUSTOMER and VS_ADMIN.
+- Customer and admin logout remain separate.
+- Customer registration uses explicit DOM field lookup; the earlier browser `name` collision is not present.
+- Admin pickup remains blocked unless demo payment is verified.
+- Booking lifecycle remains Pending -> Approved -> Confirmed -> Active -> Returned -> Completed.
+- Vehicle status protection and overlap checks remain enabled.
+- Auto-sync remains enabled on customer bookings/dashboard and admin dashboard/bookings.
+- Runtime request logs and local secrets are excluded from this distributable build.
+- .gitignore expanded to protect local database config, vendor, Composer binary, cookies, logs and .env files.
+
+AUTOMATED CHECKS PERFORMED
+- PHP syntax check passed for every application PHP file (vendor excluded).
+- assets/js/script.js passed Node syntax check.
+- Scan found no old `name:name.value`, `email:email.value`, `phone:phone.value`, or `password:password.value` registration pattern.
+- Secret/runtime files are excluded from this ZIP.
+
+IMPORTANT LOCAL FILES TO KEEP FROM YOUR CURRENT WORKING FOLDER
+- config/database.local.php
+- vendor/
+
+RUNTIME ACCEPTANCE TEST
+1. Customer register -> login -> refresh -> remains logged in.
+2. Admin login -> refresh -> remains logged in.
+3. Keep customer and admin open in separate tabs; neither should log out the other.
+4. Customer creates booking.
+5. Admin sees Pending and approves it.
+6. Customer sees Awaiting Payment automatically.
+7. Customer completes Demo Payment.
+8. Admin sees Paid (Demo) + Confirmed automatically.
+9. Admin: Picked Up -> Active -> Returned -> Completed.
+10. Vehicle returns to Available and revenue remains correct.
+
+No static audit can honestly guarantee browser/Atlas runtime behavior before this acceptance test is run on the user's XAMPP environment.

@@ -1,0 +1,54 @@
+VS TRAVELLS — FINAL INTEGRATED BUILD AUDIT
+
+BASE
+- Built from the latest user project and the session-fixed architecture.
+- Customer and Admin use independent PHP sessions (VS_CUSTOMER / VS_ADMIN).
+
+CONFIRMED FIXES
+- Registration Full Name browser name-conflict fixed.
+- Customer/admin sessions no longer destroy each other.
+- Refresh-safe named sessions retained.
+- Customer and admin logout isolated and cookie-cleaned.
+- Password hashing/password_verify retained.
+- Server-side role protection retained on protected APIs.
+- Overlapping booking protection retained at request and approval stages.
+- Pickup is now blocked unless Demo Payment is verified.
+- Cancelled bookings now get a consistent Cancelled payment status.
+- Vehicle cannot be manually marked Available/Maintenance while a confirmed/active/returned rental exists.
+- Footer no longer sends logged-out visitors to protected My Bookings.
+
+PROFESSIONAL IMPROVEMENTS
+- Customer dashboard auto-syncs booking/status data.
+- My Bookings auto-syncs without manual F5.
+- Admin dashboard/bookings/vehicles auto-sync.
+- Admin sidebar shows live pending-request count.
+- Admin displays an Auto-sync active indicator.
+- Demo payment receipt with booking details, amount, reference and print/save support.
+- Booking lifecycle tracker retained and polished.
+- Legacy Confirmed + unpaid records are visibly flagged and pickup is blocked.
+- Extra confirmation before rental lifecycle actions.
+- Improved hover, receipt, warning and responsive polish.
+- API helpers redirect cleanly to login when a session expires.
+
+AUTOMATED VALIDATION
+- All application PHP files passed php -l syntax validation.
+- assets/js/script.js passed Node syntax validation.
+- All inline JavaScript blocks passed Node syntax validation.
+- Scan found no remaining implicit name:name.value / email:email.value / phone:phone.value pattern.
+- database.local.php and vendor are intentionally absent from the delivery package.
+
+REQUIRED LOCAL RUNTIME ACCEPTANCE TEST
+1. Register a brand-new customer.
+2. Login with the exact same email/password.
+3. Refresh repeatedly; customer remains logged in.
+4. Login as admin in another tab; refresh repeatedly; admin remains logged in.
+5. Keep both portals open; neither login should destroy the other.
+6. Customer books; admin sees request automatically.
+7. Admin approves; customer sees Awaiting Payment automatically.
+8. Customer demo-pays; receipt appears; admin sees Paid/Confirmed automatically.
+9. Admin Picked Up -> Active -> Returned -> Completed.
+10. Verify revenue and vehicle availability.
+11. Test duplicate email, wrong password, overlap dates, cancellation, rejection, Maintenance, direct admin access, and logout.
+
+NOTE
+No software can honestly be guaranteed to have zero runtime defects on an environment that was not executed against its live database/session configuration. This build has been statically audited and hardened; the above XAMPP + MongoDB acceptance test is the final proof before deployment.

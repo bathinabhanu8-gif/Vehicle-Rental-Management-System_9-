@@ -59,6 +59,10 @@ try {
     $database = getDatabase();
     $collection = $database->vehicles;
 
+    if ($database->bookings->countDocuments(['vehicleId' => new ObjectId($id)]) > 0) {
+        sendResponse(false, 'This vehicle has booking history. Set it to Maintenance instead of deleting it.', null, 409);
+    }
+
     $result = $collection->deleteOne([
         '_id' => new ObjectId($id)
     ]);
