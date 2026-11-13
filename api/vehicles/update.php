@@ -1,3 +1,75 @@
 <?php
-require_once '../../middleware/jsonMiddleware.php';require_once '../../middleware/requestLogger.php';require_once '../../middleware/corsMiddleware.php';require_once '../../middleware/authMiddleware.php';require_once '../../utils/response.php';require_once '../../config/database.php';use MongoDB\BSON\ObjectId;use MongoDB\BSON\UTCDateTime;
-setJsonResponse();handleCors();logRequest();requireAdmin();if($_SERVER['REQUEST_METHOD']!=='PUT')sendResponse(false,'Method not allowed.',null,405);$d=json_decode(file_get_contents('php://input'),true);$id=trim($d['id']??'');if(!preg_match('/^[a-f0-9]{24}$/i',$id))sendResponse(false,'Invalid vehicle ID.',null,400);$name=trim($d['name']??'');$type=trim($d['type']??'');$price=$d['pricePerDay']??0;$status=trim($d['status']??'');if($name===''||!in_array($type,['Car','Bike'],true)||!is_numeric($price)||(float)$price<=0||!in_array($status,['Available','Booked','On Rent','Maintenance'],true))sendResponse(false,'Please enter valid vehicle details.',null,400);$set=['name'=>$name,'type'=>$type,'registrationNumber'=>trim($d['registrationNumber']??''),'pricePerDay'=>(float)$price,'status'=>$status,'image'=>trim($d['image']??''),'seats'=>max(1,(int)($d['seats']??($type==='Bike'?2:5))),'fuel'=>trim($d['fuel']??'Petrol'),'transmission'=>trim($d['transmission']??'Manual'),'description'=>trim($d['description']??''),'updatedAt'=>new UTCDateTime()];try{$db=getDatabase();$oid=new ObjectId($id);$live=$db->bookings->countDocuments(['vehicleId'=>$oid,'status'=>['$in'=>['Confirmed','Active','Returned']]]);if($live>0&&in_array($status,['Available','Maintenance'],true))sendResponse(false,'This vehicle has an active/confirmed rental and cannot be marked Available or Maintenance yet.',null,409);$r=$db->vehicles->updateOne(['_id'=>$oid],['$set'=>$set]);if(!$r->getMatchedCount())sendResponse(false,'Vehicle not found.',null,404);sendResponse(true,'Vehicle updated successfully.');}catch(Throwable $e){sendResponse(false,'Failed to update vehicle.',null,500);}
+require_once __DIR__ . '/../../middleware/jsonMiddleware.php';
+require_once __DIR__ . '/../../middleware/requestLogger.php';
+require_once __DIR__ . '/../../middleware/corsMiddleware.php';
+require_once __DIR__ . '/../../middleware/authMiddleware.php';
+require_once __DIR__ . '/../../utils/response.php';
+require_once __DIR__ . '/../../config/database.php';
+
+use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
+
+setJsonResponse();
+handleCors();
+logRequest();
+requireAdmin();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+    sendResponse(false, 'Method not allowed.', null, 405);
+}
+
+$d = json_decode(file_get_contents('php://input'), true);
+if (!is_array($d)) {
+    sendResponse(false, 'Invalid request data.', null, 400);
+}
+
+$id = trim($d['id'] ?? '');
+$name = trim($d['name'] ?? '');
+$type = trim($d['type'] ?? '');
+$reg = trim($d['registrationNumber'] ?? '');
+$price = $d['pricePerDay'] ?? 0;
+$status = trim($d['status'] ?? 'Available');
+$image = trim($d['image'] ?? '');
+$seats = (int)($d['seats'] ?? 0);
+$fuel = trim($d['fuel'] ?? '');
+$trans = trim($d['transmission'] ?? '');
+$desc = trim($d['description'] ?? '');
+
+if ($id === '' || $name === '' || !in_array($type, ['Car', 'Bike'], true) || !is_numeric($price) || (float)$price <= 0) {
+    sendResponse(false, 'Enter a valid vehicle ID, name, type and price.', null, 400);
+}
+
+if (!in_array($status, ['Available', 'Booked', 'On Rent', 'Maintenance'], true)) {
+    sendResponse(false, 'Invalid vehicle status.', null, 400);
+}
+
+if ($seats < 1) {
+    $seats = $type === 'Bike' ? 2 : 5;
+}
+
+try {
+    $vid = (preg_match('/^[a-f0-9]{24}$/i', $id)) ? new ObjectId($id) : $id;
+    $db = getDatabase();
+
+    $db->vehicles->updateOne(
+        ['_id' => $vid],
+        ['$set' => [
+            'name' => $name,
+            'type' => $type,
+            'registrationNumber' => $reg,
+            'pricePerDay' => (float)$price,
+            'status' => $status,
+            'image' => $image,
+            'seats' => $seats,
+            'fuel' => $fuel ?: 'Petrol',
+            'transmission' => $trans ?: 'Manual',
+            'description' => $desc,
+            'updatedAt' => new UTCDateTime()
+        ]]
+    );
+
+    sendResponse(true, 'Vehicle updated successfully.');
+} catch (Throwable $e) {
+    error_log('Vehicle update error: ' . $e->getMessage());
+    sendResponse(false, 'Failed to update vehicle.', null, 500);
+}

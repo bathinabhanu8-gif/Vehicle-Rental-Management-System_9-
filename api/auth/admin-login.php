@@ -1,9 +1,9 @@
 <?php
-require_once '../../middleware/jsonMiddleware.php';
-require_once '../../middleware/requestLogger.php';
-require_once '../../middleware/corsMiddleware.php';
-require_once '../../utils/response.php';
-require_once '../../config/database.php';
+require_once __DIR__ . '/../../middleware/jsonMiddleware.php';
+require_once __DIR__ . '/../../middleware/requestLogger.php';
+require_once __DIR__ . '/../../middleware/corsMiddleware.php';
+require_once __DIR__ . '/../../utils/response.php';
+require_once __DIR__ . '/../../config/database.php';
 
 setJsonResponse();
 handleCors();
@@ -29,8 +29,6 @@ try {
     $db = getDatabase();
     $users = $db->users;
 
-    // Normal records use lowercase email. Fall back to a normalized scan for
-    // legacy records that may contain uppercase letters or accidental spaces.
     $admin = $users->findOne(['email' => $email]);
     if (!$admin) {
         foreach ($users->find([]) as $candidate) {
@@ -47,13 +45,19 @@ try {
 
     $storedHash = (string)($admin['password'] ?? '');
     if ($storedHash === '' || !password_verify($password, $storedHash)) {
-        sendResponse(false, 'Invalid admin email or password.', null, 401);
+        // Fallback for dev plaintext
+        if ($storedHash !== '' && (password_get_info($storedHash)['algoName'] ?? 'unknown') === 'unknown' && hash_equals($storedHash, $password)) {
+            $storedHash = password_hash($password, PASSWORD_BCRYPT);
+            $users->updateOne(['_id' => $admin['_id']], ['$set' => ['password' => $storedHash]]);
+        } else {
+            sendResponse(false, 'Invalid admin email or password.', null, 401);
+        }
     }
 
-    if (password_needs_rehash($storedHash, PASSWORD_DEFAULT)) {
+    if (password_needs_rehash($storedHash, PASSWORD_BCRYPT)) {
         $users->updateOne(
             ['_id' => $admin['_id']],
-            ['$set' => ['password' => password_hash($password, PASSWORD_DEFAULT)]]
+            ['$set' => ['password' => password_hash($password, PASSWORD_BCRYPT)]]
         );
     }
 
@@ -65,7 +69,7 @@ try {
     $_SESSION['user_email'] = (string)($admin['email'] ?? $email);
     $_SESSION['user_role'] = 'admin';
 
-    sendResponse(true, 'Admin login successful.', ['role' => 'admin']);
+    sendResponse(true, 'Admin authentication successful.', ['role' => 'admin']);
 } catch (Throwable $e) {
     error_log('Admin login error: ' . $e->getMessage());
     sendResponse(false, 'Admin login failed because the server could not verify the account.', null, 500);

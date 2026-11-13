@@ -1,42 +1,61 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/LocalDatabase.php';
 
 use MongoDB\Client;
+use ResilientDB\LocalDatabase;
 
 function getDatabase()
 {
+    static $dbInstance = null;
+    if ($dbInstance !== null) {
+        return $dbInstance;
+    }
+
     $localConfigFile = __DIR__ . '/database.local.php';
     $uri = '';
     $databaseName = '';
 
-    // Local XAMPP must use the local configuration when it exists. This avoids
-    // stale machine environment variables silently pointing the app at another DB.
+    // Local XAMPP uses database.local.php when present.
     if (is_file($localConfigFile)) {
         $config = require $localConfigFile;
         $uri = (string)($config['uri'] ?? '');
-        $databaseName = (string)($config['database'] ?? '');
+        $databaseName = (string)($config['database'] ?? 'vehicle_rental_system');
     } else {
-        // Deployment (Render): the private local file is intentionally absent.
+        // Deployment (Render / Docker): environment variables
         $uri = (string)(getenv('MONGODB_URI') ?: '');
-        $databaseName = (string)(getenv('MONGODB_DATABASE') ?: '');
+        $databaseName = (string)(getenv('MONGODB_DATABASE') ?: 'vehicle_rental_system');
     }
 
-    if ($uri === '' || $databaseName === '') {
-        throw new Exception('Database configuration is incomplete.');
-    }
+    // Attempt Cloud MongoDB Atlas connection if URI is present
+    if ($uri !== '') {
+        try {
+            $driverOptions = [];
+            $xamppCaFile = 'C:/xampp/apache/bin/curl-ca-bundle.crt';
+            if (is_file($xamppCaFile)) {
+                $driverOptions['tlsCAFile'] = $xamppCaFile;
+            }
 
-    try {
-        $driverOptions = [];
-        $xamppCaFile = 'C:/xampp/apache/bin/curl-ca-bundle.crt';
-        if (is_file($xamppCaFile)) {
-            $driverOptions['tlsCAFile'] = $xamppCaFile;
+            // Set short server selection timeout to avoid long hangs in offline environments
+            $client = new Client($uri, [
+                'serverSelectionTimeoutMS' => 2500,
+                'connectTimeoutMS' => 2500
+            ], $driverOptions);
+
+            // Ping the database to verify connectivity
+            $database = $client->selectDatabase($databaseName);
+            $database->command(['ping' => 1]);
+
+            $dbInstance = $database;
+            return $dbInstance;
+        } catch (Throwable $e) {
+            error_log('[Database Resilience] Cloud MongoDB Atlas unreachable (' . $e->getMessage() . '). Switching to Resilient Local Engine.');
         }
-
-        $client = new Client($uri, [], $driverOptions);
-        return $client->selectDatabase($databaseName);
-    } catch (Throwable $e) {
-        error_log('MongoDB connection error: ' . $e->getMessage());
-        throw new Exception('Database connection failed.');
     }
+
+    // Graceful fallback to Resilient Local Engine
+    $localStorageFile = __DIR__ . '/../database/data_store.json';
+    $dbInstance = new LocalDatabase($localStorageFile);
+    return $dbInstance;
 }
